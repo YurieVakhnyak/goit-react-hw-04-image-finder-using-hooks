@@ -1,0 +1,11 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  justify-items: right;
+  margin-left: 40px;
+}
+
+.messageError {
+  font-size: xx-large;
+}
