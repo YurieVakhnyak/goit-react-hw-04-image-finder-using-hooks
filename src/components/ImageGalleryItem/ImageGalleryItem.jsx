@@ -1,80 +1,65 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import css from '../ImageGalleryItem/ImageGalleryItem.module.css';
 import { Modal } from '../Modal/Modal';
 import { ImSpinner9 } from 'react-icons/im';
 
-export class ImageGalleryItem extends Component {
-  constructor(props) {
-    super(props);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.state = {
-      showModal: false,
-      loading: true,
+export default function ImageGalleryItem({
+  webformatURL,
+  largeImageURL,
+  tags,
+}) {
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
     };
-  }
+  }, []);
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyPress);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyPress);
-  }
-
-  handleKeyPress(event) {
+  const handleKeyPress = event => {
     if (event.keyCode === 27) {
       // обробка натискання клавіші Escape
-
       console.log('Escape key pressed');
-      this.setState(() => ({
-        showModal: false,
-      }));
+      setShowModal(false);
     }
-  }
-
-  handleImageLoad = () => {
-    this.setState({ loading: false });
   };
 
-  toggleModal = evt => {
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
+
+  const toggleModal = evt => {
     evt.preventDefault();
-
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-      // target: evt.target,
-    }));
+    setShowModal(!showModal);
   };
 
-  render() {
-    const { showModal, loading } = this.state;
-    const { webformatURL, largeImageURL, tags } = this.props;
-
-    if (showModal) {
-      return (
-        <Modal className={css.ImageGalleryItem} onClick={this.toggleModal}>
-          {loading && (
-            <ImSpinner9 size="100" className={css.iconSpin} color="blue" />
-          )}
-          <img
-            onClick={this.toggleModal}
-            onLoad={this.handleImageLoad}
-            src={largeImageURL}
-            alt={tags}
-            loading="lazy"
-          />
-        </Modal>
-      );
-    }
-
+  if (showModal) {
     return (
-      <div className={css.ImageGalleryItem} onClick={this.toggleModal}>
+      <Modal className={css.ImageGalleryItem} onClick={toggleModal}>
+        {loading && (
+          <ImSpinner9 size="100" className={css.iconSpin} color="blue" />
+        )}
         <img
-          className={css.ImageGalleryItemImage}
-          src={webformatURL}
+          onClick={toggleModal}
+          onLoad={handleImageLoad}
+          src={largeImageURL}
           alt={tags}
           loading="lazy"
         />
-      </div>
+      </Modal>
     );
   }
+
+  return (
+    <div className={css.ImageGalleryItem} onClick={toggleModal}>
+      <img
+        className={css.ImageGalleryItemImage}
+        src={webformatURL}
+        alt={tags}
+        loading="lazy"
+      />
+    </div>
+  );
 }

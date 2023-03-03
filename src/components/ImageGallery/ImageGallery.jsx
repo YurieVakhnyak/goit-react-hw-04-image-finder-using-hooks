@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 // import axios from 'axios';
 import { InfinitySpin } from 'react-loader-spinner';
 import { ImagesErrorView } from '../ImagesErrorView/ImagesErrorView';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { LoadMoreButton } from 'components/LoadMoreButton/LoadMoreButton';
 import css from '../ImageGallery/ImageGallery.module.css';
 import { Notify } from 'notiflix';
 
 const API_KEY = '33411326-e3b74484d09501fb125cb8795';
 let perPage = 12;
+console.log('Image gallery is here!');
 
 export default function ImageGallery({ searchValue }) {
   const [images, setImages] = useState(null);
@@ -16,20 +17,24 @@ export default function ImageGallery({ searchValue }) {
   const [error, setError] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
+  console.log(` Gallery searchValue: ${searchValue}`);
+
   const loadMoreImages = () => {
     setPageNumber(prevPageNumber => prevPageNumber + 1);
     console.log(pageNumber);
-    d;
   };
 
   useEffect(() => {
-    if (!images) {
+    if (!searchValue) {
       return;
     }
     setStatus('pending');
     setPageNumber(1);
 
-    let inputQuery = searchValue.trim();
+    let inputQuery = searchValue;
+    console.log(`inputQuery: ${searchValue}`);
+
+    // .trim();
 
     const searchParams = new URLSearchParams({
       key: API_KEY,
@@ -41,23 +46,25 @@ export default function ImageGallery({ searchValue }) {
       safesearch: true,
     });
 
-    setImages(null);
+    // setImages(null);
 
     fetch(`https://pixabay.com/api/?${searchParams}`)
       .then(response => {
+        console.log('response is almost here!');
         if (response.ok) {
           return response.json();
         }
         return Promise.reject(new Error('Щось не так...'));
       })
       .then(images => {
-        return setStatus('resolved') && setImages(images);
+        setStatus('resolved');
+        setImages(images);
       })
       .catch(error => {
         setError(error);
         setStatus('rejected');
       });
-  }, [images, pageNumber, searchValue]);
+  }, [searchValue]);
 
   if (status === 'idle') {
     return (
@@ -91,7 +98,7 @@ export default function ImageGallery({ searchValue }) {
           {currentImages.map(({ id, webformatURL, largeImageURL, tags }) => (
             <ImageGalleryItem
               key={id}
-              showLargeImage={this.state.showLargeImage}
+              // showLargeImage={this.state.showLargeImage}
               webformatURL={webformatURL}
               largeImageURL={largeImageURL}
               tags={tags}

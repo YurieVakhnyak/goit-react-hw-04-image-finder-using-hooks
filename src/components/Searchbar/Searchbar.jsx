@@ -4,15 +4,14 @@ import { useState } from 'react';
 import { Notify } from 'notiflix';
 
 export default function Searchbar({ submitSearchValue }) {
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState('');
 
   const onSubmitSearch = evt => {
     evt.preventDefault();
-    if (searchValue.trim === '') {
+    if (searchValue.trim() === '') {
       Notify.info('Enter something...');
       return;
     }
-
     submitSearchValue(searchValue);
 
     setSearchValue({
@@ -22,9 +21,7 @@ export default function Searchbar({ submitSearchValue }) {
 
   const onChangeSearchValue = evt => {
     const { value } = evt.target;
-
     setSearchValue(value);
-    console.log(searchValue);
   };
 
   return (
