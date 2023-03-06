@@ -30,8 +30,8 @@ export default function ImageGallery({ searchValue }) {
 
     let inputQuery = searchValue.trim();
     console.log(`inputQuery: ${searchValue}`);
-
-    //
+    // setPageNumber(pageNumber);
+    console.log(pageNumber);
 
     const searchParams = new URLSearchParams({
       key: API_KEY,
@@ -43,7 +43,7 @@ export default function ImageGallery({ searchValue }) {
       safesearch: true,
     });
 
-    // setImages(null);
+    setImages(null);
 
     fetch(`https://pixabay.com/api/?${searchParams}`)
       .then(response => {
@@ -94,11 +94,9 @@ export default function ImageGallery({ searchValue }) {
           {currentImages.map(({ id, webformatURL, largeImageURL, tags }) => (
             <ImageGalleryItem
               key={id}
-              // showLargeImage={this.state.showLargeImage}
               webformatURL={webformatURL}
               largeImageURL={largeImageURL}
               tags={tags}
-              // onClickImage={toggleModal}
             />
           ))}
         </ul>
