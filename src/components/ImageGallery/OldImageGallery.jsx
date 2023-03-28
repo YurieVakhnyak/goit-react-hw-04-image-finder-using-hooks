@@ -16,7 +16,6 @@ export class ImageGallery extends Component {
     error: null,
     status: 'idle',
     pageNumber: 1,
-    // target: null,
   };
 
   loadMoreImages = evt => {

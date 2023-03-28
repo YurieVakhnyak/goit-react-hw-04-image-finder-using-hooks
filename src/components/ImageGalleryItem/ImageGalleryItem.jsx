@@ -20,8 +20,6 @@ export default function ImageGalleryItem({
 
   const handleKeyPress = event => {
     if (event.keyCode === 27) {
-      // обробка натискання клавіші Escape
-      console.log('Escape key pressed');
       setShowModal(false);
     }
   };

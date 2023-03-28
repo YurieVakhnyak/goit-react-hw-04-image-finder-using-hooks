@@ -18,7 +18,6 @@ export default function ImageGallery({ searchValue }) {
 
   const loadMoreImages = () => {
     setPageNumber(prevPageNumber => prevPageNumber + 1);
-    console.log(pageNumber);
   };
 
   useEffect(() => {
@@ -31,7 +30,6 @@ export default function ImageGallery({ searchValue }) {
     let inputQuery = searchValue.trim();
     console.log(`inputQuery: ${searchValue}`);
     // setPageNumber(pageNumber);
-    console.log(pageNumber);
 
     const searchParams = new URLSearchParams({
       key: API_KEY,
@@ -60,6 +58,7 @@ export default function ImageGallery({ searchValue }) {
         setError(error);
         setStatus('rejected');
       });
+    // eslint-disable-next-line
   }, [searchValue]);
 
   if (status === 'idle') {
